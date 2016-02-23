@@ -106,21 +106,19 @@ The REST-JSON services are thus particularly adapted to the construction of valu
 OSM Service (OpenStreetMap)
 ---------------------------
 
-The Data platform provides a base map tiled service build from the `OpenStreetMap <openstreetmap.fr>`_ database on Rhône-Alpes Region. It is found at the URL :
+The Data platform delivers a tiled mapping service respecting the WMTS standard. Two tilesets are provided, the 2015 Orthophotography of the Metropole, and an `OpenStreetMap <openstreetmap.fr>`_ cover of the Auvergne-Rhône-Alpes and Burgundy regions. The WMTS service is callable from the URL :
 
-http://openstreetmap.data.grandlyon.com
+http://openstreetmap.data.grandlyon.com/wmts/
 
-.. image:: http://openstreetmap.data.grandlyon.com/?LAYERS=osm_grandlyon&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&STYLES=&EXCEPTIONS=application%2Fvnd.ogc.se_inimage&FORMAT=image%2Fjpeg&SRS=EPSG%3A4326&BBOX=4.8484037210919,45.764534434461,4.8548554273902,45.770986140759&WIDTH=256&HEIGHT=256
-   :alt: GrandLyon Data : OSM Service
+.. image:: http://openstreetmap.data.grandlyon.com/wmts/?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=osm_grandlyon&STYLE=default&TILEMATRIXSET=GoogleMapsCompatible&TILEMATRIX=16&TILEROW=23379&TILECOL=33653&FORMAT=image%2Fpng
+   :alt: GrandLyon Data : OpenStreetMap WMTS Service
    :class: floatingflask
-
-The name of the layer to be used is simply osm_grandlyon. The layer is available in the following projection systems :
-
-* ESPG:3857 and EPSG:900913 (Spherical Mercator)
-
-* EPSG:4326 (WGS84)
-
-* EPSG:4171 (RGF93)
-
-Please note that these two last systems are degrees defined and not meters defined. Their usage to make a map (instead of accessing the data) leads to a visual result which is kind of crushed, which is completely normal as you are in fact projecting spherical geographic coordinates on a plane surface, being the screen or a file. This projection is named `plate-carrée <https://en.wikipedia.org/wiki/Equirectangular_projection>`_).
+   
+.. image:: http://openstreetmap.data.grandlyon.com/wmts/?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=ortho2015&STYLE=default&TILEMATRIXSET=GoogleMapsCompatible&TILEMATRIX=16&TILEROW=23378&TILECOL=33652&FORMAT=image%2Fjpeg
+   :alt: GrandLyon Data : 2015 Orthophotography tileset
+   :class: floatingflask
+   
+The name of the tilesets are respectively osm_grandlyon and ortho2015. These tilesets are available in Spherical Mercator projection system (EPSG:3857 et EPSG:900913)  and are therefore compatible with other services of the same kind, like GoogleMaps or French IGN API. 
+To use the WMTS service within QGIS, remember to set the service URL to the full GetCapabilities request URL :
+http://openstreetmap.data.grandlyon.com/wmts/?REQUEST=GetCapabilities&SERVICE=WMTS
 
