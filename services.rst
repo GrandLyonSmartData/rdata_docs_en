@@ -135,7 +135,7 @@ The first one is related to noise sensors (1) located in the Lyon urban area. Th
 
 For now, the above services are available in SOS ``1.0.0``.
 
-Like any OGC services, *GetCapabilities* is used to request a capabilities document that describes the service's functionality. *DescribeSensor* return metadata that describes the characteristics of an observation procedure as a XML-based Sensor Model Language (SensorML). Then the *GetObservation* operation is designed to query a service to retrieve observation data structured according to the Observation and Measurement specification.
+Like any OGC services, *GetCapabilities* is used to request a capabilities document that describes the service's functionality. *DescribeSensor* returns metadata that describes the characteristics of an observation procedure as a XML-based Sensor Model Language (SensorML). Then the *GetObservation* operation is designed to query a service to retrieve observation data structured according to the Observation and Measurement specification.
 
 
 Graph view
