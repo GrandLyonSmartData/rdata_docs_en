@@ -134,8 +134,9 @@ Corresponding source code :
 
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 
-        <script src="leaflet.js"></script>
         <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+	<script src="https://unpkg.com/leaflet@1.0.1/dist/leaflet.js"></script>
+    	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.1/dist/leaflet.css" />
         
         <link rel="stylesheet" href="leaflet.css" />
         <style>
@@ -161,8 +162,8 @@ Corresponding source code :
                     opacity: 0.6       
             }).addTo(map);
             //Layer WMS openstreetmap
-            L.tileLayer.wms("http://openstreetmap.wms.data.grandlyon.com/default",{
-                    layers: 'default',
+            L.tileLayer.wms("https://openstreetmap.data.grandlyon.com/",{
+                    layers: 'osm_grandlyon',
                     format: 'image/png', 
                     transparent: true,    
                     opacity: 0.7       
@@ -170,7 +171,7 @@ Corresponding source code :
             
             //Proxy definition for cross-domain handling. Please refer to the Good Practices -> Proxyfication section for more information.
 			var proxy = "proxy.php?url=";
-            var data_url = "https://secure.grandlyon.webmapping.fr/wfs/rdata";
+            var data_url = "https://download.data.grandlyon.com/wfs/rdata";
             var params = '?SERVICE=WFS
                 &REQUEST=GetFeature
                 &VERSION=1.1.0
