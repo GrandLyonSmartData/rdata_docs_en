@@ -108,19 +108,19 @@ OSM Service (OpenStreetMap)
 
 The Data platform delivers a tiled mapping service respecting the WMTS standard. Two tilesets are provided, the 2015 Orthophotography of the Metropole, and an `OpenStreetMap <http://www.openstreetmap.fr>`_ cover of the Auvergne-Rhône-Alpes and Burgundy regions. The WMTS service is callable from the URL :
 
-http://openstreetmap.data.grandlyon.com/wmts/
+https://openstreetmap.data.grandlyon.com/wmts/
 
-.. image:: http://openstreetmap.data.grandlyon.com/wmts/?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=osm_grandlyon&STYLE=default&TILEMATRIXSET=GoogleMapsCompatible&TILEMATRIX=16&TILEROW=23379&TILECOL=33653&FORMAT=image%2Fpng
+.. image:: https://openstreetmap.data.grandlyon.com/wmts/?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=osm_grandlyon&STYLE=default&TILEMATRIXSET=GoogleMapsCompatible&TILEMATRIX=16&TILEROW=23379&TILECOL=33653&FORMAT=image%2Fpng
    :alt: GrandLyon Data : OpenStreetMap WMTS Service
    :class: floatingflask
 
-.. image:: http://openstreetmap.data.grandlyon.com/wmts/?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=ortho2015&STYLE=default&TILEMATRIXSET=GoogleMapsCompatible&TILEMATRIX=16&TILEROW=23378&TILECOL=33652&FORMAT=image%2Fjpeg
+.. image:: https://openstreetmap.data.grandlyon.com/wmts/?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=ortho2015&STYLE=default&TILEMATRIXSET=GoogleMapsCompatible&TILEMATRIX=16&TILEROW=23378&TILECOL=33652&FORMAT=image%2Fjpeg
    :alt: GrandLyon Data : 2015 Orthophotography tileset
    :class: floatingflask
 
 The name of the tilesets are respectively osm_grandlyon and ortho2015. These tilesets are available in Spherical Mercator projection system (EPSG:3857 et EPSG:900913)  and are therefore compatible with other services of the same kind, like GoogleMaps or French IGN API.
 To use the WMTS service within QGIS, remember to set the service URL to the full GetCapabilities request URL :
-http://openstreetmap.data.grandlyon.com/wmts/?REQUEST=GetCapabilities&SERVICE=WMTS
+https://openstreetmap.data.grandlyon.com/wmts/?REQUEST=GetCapabilities&SERVICE=WMTS
 
 SOS Service (sensor data)
 -------------------------
