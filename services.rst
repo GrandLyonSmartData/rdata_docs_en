@@ -72,39 +72,200 @@ Once again, it is a standardized service for which the cartographic libraries pr
 
 REST Services (JSON)
 -----------------------
-The JSON service of our infrastructure allows an easy and fast navigation between the several datasets provided. Each service has a dedicated entry point :
+The JSON services of our infrastructure allows an easy and fast navigation between the several datasets provided. 
 
-https://download.data.grandlyon.com/ws/grandlyon/all.json
+The entry point of each service is built on the following pattern :
+
+``https://download.data.grandlyon.com/ws/<service>/all.json``
+
+Currently available services are "grandlyon" and "rdata" :
+
+``https://download.data.grandlyon.com/ws/grandlyon/all.json``
 
 and
 
-https://download.data.grandlyon.com/ws/rdata/all.json
+``https://download.data.grandlyon.com/ws/rdata/all.json``
 
 The documents list all the available tables both in consultation and download. Some of them can have a restricted access depending on your rights.
 
-From link to link, you can then navigate towards the tables description (for instance https://download.data.grandlyon.com/ws/grandlyon/fpc_fond_plan_communaut.fpcplandeau.json), the different predefined values used in a specific field (for instance the type of trees in Greater Lyon : https://download.data.grandlyon.com/ws/grandlyon/abr_arbres_alignement.abrarbre/essencefrancais.json). This last mode provides a few more options :
+:: 
+  
+  {
+      
+      results: [{
+      
+         table_schema: "abr_arbres_alignement",
+         
+         href: "https://download.data.grandlyon.com/ws/grandlyon/abr_arbres_alignement.abrarbre.json",
+         
+         table_name: "abrarbre"
+      
+      },{
+         
+         table_schema: "adr_voie_lieu",
+         
+         href: "https://download.data.grandlyon.com/ws/grandlyon/adr_voie_lieu.adradresse.json",
+         
+         table_name: "adradresse"
 
-* compact : if false, gives a (key,value) result for all the records, else, only lists the different values found in the whole table. Default is True.
+      },{
+      
+         ...
+         
+      }]
 
-* maxfeatures : indicates the maximal number of records to be returned by the service. Default is 1000.
+   }
 
-* start : indicates the start index, in order to paginate the results. Default is 1.
+Each table has an associated URL with the following pattern : 
+
+``https://download.data.grandlyon.com/ws/<service>/<table_schema>.<table_name>.json``
+
+From link to link, you can then navigate towards the tables description.
+
+For instance : https://download.data.grandlyon.com/ws/grandlyon/abr_arbres_alignement.abrarbre.json
+
+::
+
+   {
+      
+      requested_table: "abr_arbres_alignement.abrarbre",
+      
+      nb_records: 92216,
+      
+      database_href: "https://download.data.grandlyon.com/ws/grandlyon/all.json",
+      
+      nb_results: 26,
+      
+      results: [{
+      
+         is_pk: false,
+         
+         column_type: "varchar",
+         
+         precision: 50,
+         
+         is_nullable: "YES",
+         
+         href: "https://download.data.grandlyon.com/ws/grandlyon/abr_arbres_alignement.abrarbre/essencefrancais.json",
+         
+         column_name: "essencefrancais"
+      
+      },{
+         
+         is_pk: false,
+         
+         column_type: "int4",
+         
+         precision: 32,
+         
+         is_nullable: "YES",
+         
+         href: "https://download.data.grandlyon.com/ws/grandlyon/abr_arbres_alignement.abrarbre/circonference_cm.json",
+         
+         column_name: "circonference_cm"
+      
+      },{
+      
+         ...
+         
+      }]
+
+   }
+
+List of displayed fields :
+
+* **is_pk**: is the layer identifier ? 
+
+* **column_type**: field type (numeric, text, etc)
+
+* **precision**: field size
+
+* **is_nullable**: is null value possible ?
+
+* **href**: distinct values of the target attribute 
+
+* **column_name**: field name
+
+The URL in the href field provides access to the different predefined values used in a specific field.
+
+For instance the type of trees in Greater Lyon : https://download.data.grandlyon.com/ws/grandlyon/abr_arbres_alignement.abrarbre/essencefrancais.json
+
+::
+
+   {
+      
+      fields: [
+         
+         "essencefrancais"
+      
+      ],
+      
+      nb_results: 401,
+      
+      values: [
+         
+         "Magnolia à grandes fleurs",
+        
+         "Erable rouge 'Schlesingeri'",
+         
+         "Arbre puant des Chinois",
+         
+         "Chène rouge d'Espagne",
+         
+         "Frêne d'Amérique",
+         
+         "Orme champêtre",
+         
+         "Chêne pédonculé fastigié, Chêne pyramidal",
+         
+         ...
+      
+      ]
+   
+   }
+
+This last mode provides a few more options :
+
+* **compact** : if false, gives a (key,value) result for all the records, else, only lists the different values found in the whole table. Default is True.
+
+* **maxfeatures** : indicates the maximal number of records to be returned by the service. Default is 1000.
+
+* **start** : indicates the start index, in order to paginate the results. Default is 1.
 
 Thus, one can request the service for 50 kinds of trees from the 100th in the database (which can sound useless however):
 
 https://download.data.grandlyon.com/ws/grandlyon/abr_arbres_alignement.abrarbre/essencefrancais.json?compact=false&maxfeatures=50&start=101
 
-
 One can also reach the full content of a table (or paginate this content) using a URL such this one :
 
 https://download.data.grandlyon.com/ws/rdata/jcd_jcdecaux.jcdvelov/all.json?compact=false
 
-to consult the integrality of the records. In this all.json mode which dislays individual records, compact flag is always false. All.json also contains complementary information about pagination. It does include two links towards previous and next page, using the same maxfeature and adapting the start parameter from the current page. 
+to consult the integrality of the records. 
+
+In this all.json mode which dislays individual records, compact flag is always false. 
+
+The default number of returned records is set to 1000 for performance reasons. You can override this setting using the maxfeatures parameter.
+
+*Example* : 
+https://download.data.grandlyon.com/ws/grandlyon/gip_proprete.gipdecheterie/all.json?maxfeatures=10
+ 
+It is also possible to filter records on an attribute value using a URL such this one :
+``https://download.data.grandlyon.com/ws/<service>/<table_schema>.<table_name>/all.json?field=<attribut>&value=<valeur>``
+
+For instance : https://download.data.grandlyon.com/ws/grandlyon/abr_arbres_alignement.abrarbre/all.json?field=essencefrancais&value=Marronnier%20de%20Virginie
+
+all.json also contains complementary information about pagination. It does include two links towards previous and next page, using the same maxfeature and adapting the start parameter from the current page. 
+
+*Example* : 
+https://download.data.grandlyon.com/ws/grandlyon/gip_proprete.gipdecheterie/all.json?maxfeatures=5&start=10
+
+returns records 10 to 15 of gipdecheterie layer.
 
 The REST-JSON services are thus particularly adapted to the construction of values lists, tables and paginated grids, inside datasets GUI.
 
-OSM Service (OpenStreetMap)
----------------------------
+
+WMTS Service
+------------
 
 The Data platform delivers a tiled mapping service respecting the WMTS standard. Two tilesets are provided, the 2015 Orthophotography of the Metropole, and an `OpenStreetMap <http://www.openstreetmap.fr>`_ cover of the Auvergne-Rhône-Alpes and Burgundy regions. The WMTS service is callable from the URL :
 
