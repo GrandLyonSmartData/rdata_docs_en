@@ -72,7 +72,8 @@ Once again, it is a standardized service for which the cartographic libraries pr
 
 REST Services (JSON)
 -----------------------
-The JSON service of our infrastructure allows an easy and fast navigation between the several datasets provided. 
+The JSON services of our infrastructure allows an easy and fast navigation between the several datasets provided. 
+
 The entry point of each service is built on the following pattern :
 
 ``https://download.data.grandlyon.com/ws/<service>/all.json``
@@ -86,8 +87,6 @@ and
 ``https://download.data.grandlyon.com/ws/rdata/all.json``
 
 The documents list all the available tables both in consultation and download. Some of them can have a restricted access depending on your rights.
-
-**Sample output ** : 
 
 :: 
   
