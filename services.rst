@@ -339,3 +339,18 @@ Also, sensor data can be viewed through online mapping tools which include the f
 * \(2\) City bike avaibility: http://demo.data.grandlyon.com/wmst/reseau_velov.html
 
 Map is clickable. It returns information data about the sensor station (hyperlink to the graph view, last update, etc.).
+
+
+KML Services
+------------
+GrandLyon Data also publishes the data in KML format. Data for each service is accessible from the following URL : 
+https://download.data.grandlyon.com/kml/[service_name]/?request=layer&typename=[schema].[name]
+
+*Example* : https://download.data.grandlyon.com/kml/grandlyon/?request=layer&typename=pvo_patrimoine_voirie.pvostationvelov
+
+This format is suitable for Google Earth and Maps Javascript API (Google)
+
+For performance reasons, the KML service uses WMS flow instead of vector objects when the number of objects to display is too large (greater than 1000).
+
+It is also possible to consult all the layers of a service in the same tree using the parameter ``request=list`` (instead of request=layer).
+*Example* : https://download.data.grandlyon.com/kml/grandlyon?request=list
