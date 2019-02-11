@@ -264,6 +264,22 @@ returns records 10 to 15 of gipdecheterie layer.
 The REST-JSON services are thus particularly adapted to the construction of values lists, tables and paginated grids, inside datasets GUI.
 
 
+Shapefile export
+----------------
+
+The shapefile export can be used from JSON services by using a .shp extension when requesting a layer (i.e. https://download.data.grandlyon.com/ws/rdata/pvo_heritage_family. pvotrafic.shp). This returns to the user a zip containing a shapefile (SHP + SHX + DBF) of the layer.
+
+In addition, several parameters are available :
+
+* srsname, which allows to specify the coordinate system for the export (using EPSG: XXXX, to choose between 4171, 3946, 2154, 4326 and 4258)
+
+* a clipping third layer, which will be identified by a mask_layer attribute (name of the clipping layer), mask_field (fields on which to filter this layer) and finally mask_value (value of the field mask_field to generate the clipping polygon). This makes it possible to recover a geometrical entity that will serve as a filter for the requested main layer.
+
+Example : https://download.data.grandlyon.com/ws/grandlyon/gic_collect.gicsiloverre.shp?mask_db=grandlyon&mask_layer=adr_circle_watch.adrcommune&mask_field=insee&mask_value=69034
+
+The layer gicsiloverre will be cut to recover only the objects located in the polygon having the attribute insee at 69034 of the adr_voie_lieu.adrcommune layer.
+
+
 WMTS Service
 ------------
 
