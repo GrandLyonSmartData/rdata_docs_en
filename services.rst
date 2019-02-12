@@ -344,7 +344,7 @@ Webmapping tool (WMS-Time)
 
 Data shall be available by a WMS service which can provide temporal requests (with the ``TIME`` parameter).
 
-http://mapserver.middle.data.grandlyon.com/wms/ldata?
+https://download.data.grandlyon.com/wms/ldata?
 
 * \(1\) Acoustic survey data: ``bruit.stations_observatoire_acoustique`` / ``bruit.stations_observatoire_acoustique_time``
 * \(2\) City bike avaibility: ``velov.stations`` / ``velov.stations_time``
