@@ -60,13 +60,13 @@ https://download.data.grandlyon.com/wcs/grandlyon?service=WCS&request=GetCapabil
 
 sends back a XML document listing (among others) the available layers provided by the service, which you'll get the description of with the help of a DescribeCoverage operation :
 
-https://download.data.grandlyon.com/wcs/grandlyon?service=WCS&request=DescribeCoverage&version=1.1.0&identifiers=Ortho2009_vue_ensemble_16cm_CC46,1830_5155_16_CC46
+https://download.data.grandlyon.com/wcs/grandlyon?service=WCS&request=DescribeCoverage&version=1.1.0&identifiers=MNT2015_Altitude_10m_WCS,road_ln_p
 
-The returned information concerns only the specified layers by the identifier parameter (here Ortho2009_vue_ensemble_16cm_CC46 and 1830_5155_16_CC46) and are a little bit more accurate than in the GetCapabilities.
+The returned information concerns only the specified layers by the identifier parameter (here MNT2015_Altitude_10m_WCS and road_ln_p) and are a little bit more accurate than in the GetCapabilities.
 
 Finally, to obtain the desired coverage, one uses a GetCoverage request of this type :
 
-https://download.data.grandlyon.com/wcs/grandlyon?service=WCS&BBOX=1830000,5155000,1830100,5155100&request=GetCoverage&version=1.1.0&format=image/tiff&crs=EPSG::3946&identifiers=1830_5155_16_CC46
+https://download.data.grandlyon.com/wcs/grandlyon?SERVICE=WCS&VERSION=1.0.0&REQUEST=GetCoverage&FORMAT=GTiff&COVERAGE=road_ln_p&BBOX=1836243.96544679999351501,5162352.9513221001252532,1842093.96544679999351501,5168132.9513221001252532&CRS=EPSG:3946&RESPONSE_CRS=EPSG:3946&WIDTH=585&HEIGHT=578
 
 Once again, it is a standardized service for which the cartographic libraries provide all the necessary classes and operation for a sipmle and efficient usage.
 
@@ -263,6 +263,19 @@ returns records 10 to 15 of gipdecheterie layer.
 
 The REST-JSON services are thus particularly adapted to the construction of values lists, tables and paginated grids, inside datasets GUI.
 
+REST Services (CSV)
+-------------------
+
+*Example* :
+https://download.data.grandlyon.com/ws/grandlyon/gip_proprete.gipdecheterie/all.csv?maxfeatures=5&start=10
+
+In the same way that we request the JSON service, we can request a CSV extract by replacing the ".json" extension of the URL with ".csv".
+
+The decimal separator can be replaced by adding 'ds=,' or 'ds=.' in the query.
+
+The column separator can also be changed using the "separator=;" option for example.
+
+An additional parameter "geometry=on" (off by default) adds a column "WKT" containing the geometry of the object in [WKT] format(https://fr.wikipedia.org/wiki/Well-known_text)
 
 Shapefile export
 ----------------
@@ -298,6 +311,34 @@ https://openstreetmap.data.grandlyon.com/wmts/
 The name of the tilesets are respectively osm_grandlyon and ortho2015. These tilesets are available in Spherical Mercator projection system (EPSG:3857 et EPSG:900913)  and are therefore compatible with other services of the same kind, like GoogleMaps or French IGN API.
 To use the WMTS service within QGIS, remember to set the service URL to the full GetCapabilities request URL :
 https://openstreetmap.data.grandlyon.com/wmts/?REQUEST=GetCapabilities&SERVICE=WMTS
+
+WMTS Service (Orthophotographs)
+-------------------------------
+
+Additional WMTS/WMS services exist broadcasting orthophotograph streams.
+
+They can be accessed here:
+* https://imagerie.data.grandlyon.com/all/wmts?service=WTMS&request=getcapabilities
+* https://imagerie.data.grandlyon.com/2154/wmts?service=WTMS&request=getcapabilities
+* https://imagerie.data.grandlyon.com/3857/wmts?service=WTMS&request=getcapabilities
+* https://imagerie.data.grandlyon.com/3946/wmts?service=WTMS&request=getcapabilities
+
+These streams have a cache and are preferred over WMS streams available on https://download.data.grandlyon.com/wms/grandlyon
+
+OpenMapTiles Services
+---------------------
+
+This service offers OpenMaptiles tiles to use for basemaps
+
+Demo Client: https://openmaptiles.data.grandlyon.com/data/v3/#8.37/45.796/4.592
+
+These tiles are updated weekly using OpenStreetMap data.
+
+https://openmaptiles.data.grandlyon.com/data/v3/1/1/0.pbf
+
+These tiles can be used by the main web GIS frameworks (MaplibreGL, Leaflet,...) for example: https://openmaptiles.org/docs/website/maplibre-gl-js/
+
+
 
 SOS Service (sensor data)
 -------------------------
@@ -370,3 +411,76 @@ For performance reasons, the KML service uses WMS flow instead of vector objects
 
 It is also possible to consult all the layers of a service in the same tree using the parameter ``request=list`` (instead of request=layer).
 *Example* : https://download.data.grandlyon.com/kml/grandlyon?request=list
+
+Services MVT
+------------
+
+Vector datasets are available in Mapbox Vector Tile (MVT) format[https://docs.mapbox.com/vector-tiles/specification/]
+
+https://download.data.grandlyon.com/mvt/grandlyon?LAYERS=car_care.carencadrmtloyer_latest&map.imagetype=mvt&tilemode=gmap&tile=1052+730+11&mode=tile
+
+This format is comparable to WFS but is tiled and geometrics are simplified. The goal is to be much faster than the WFS by allowing in addition to being cached. In output we obtain a tile encoded using the format (PBF)[https://fr.wikipedia.org/wiki/Protocol_Buffers] (protobuf) (more compact equivalent of JSON)
+
+These tiles can be used by web clients like MapboxGL, MapLibre or OpenLayers.
+
+QGis can also read these tiles using the "Vector Tiles Reader" plugin. QGIS 3.20 manages MVT.
+
+
+Geocoder Photon
+---------------
+
+This service makes it possible to perform direct geocoding (conversion of a postal address or place name into geographical coordinates) and reverse (conversion of geographical coordinates into postal address or place name).
+
+It is powered by the Open-Source tool Photon (see https://github.com/komoot/photon), powered by OpenStreetMap data relating to the former Rhône-Alpes region (see https://download.geofabrik.de/europe/france/rhone-alpes.html).
+
+The official documentation for Photon's search API is populated on GitHub, https://github.com/komoot/photon#search-api.
+
+The link to make a query is as follows (replace the.. with the place to geocode):
+https://download.data.grandlyon.com/geocoding/photon/api?q=...
+Examples:
+https://download.data.grandlyon.com/geocoding/photon/api?q=lyon
+https://download.data.grandlyon.com/geocoding/photon/api?q=%22Rue%20garibaldi%22
+
+
+Dataset statistics
+------------------
+
+To query statistics, queries take the following form:
+`https://download.data.grandlyon.com/statistiques/dataset?UUID=ad771ef2-7a40-11ea-ae2d-dbfa27ebc23c&start=2019-04-09&end=2020-04-09&granularity=week`
+
+```json
+[
+  {"date": "2019-04-08", "service":"wms", "count":362},
+  {"date": "2019-04-08", "service":"wfs", "count":123},
+  {"date": "2019-04-08", "service":"ws", "count":12},
+  {"date": "2019-04-08", "service":"kml", "count":2},
+  {"date": "2019-04-15", "service":"wms", "count":364},
+  {"date": "2019-04-15", "service":"wfs", "count":125},
+  {"date": "2019-04-15", "service":"ws", "count":10},
+  {"date": "2019-04-15", "service":"kml", "count":4},
+  ...
+  {"date": "2020-03-30", "service":"wms", "count":462},
+  {"date": "2020-03-30", "service":"wfs", "count":223},
+  {"date": "2020-03-30", "service":"ws", "count":22},
+  {"date": "2020-03-30", "service":"kml", "count":50},
+  {"date": "2020-04-06", "service":"wms", "count":202},
+  {"date": "2020-04-06", "service":"wfs", "count":113},
+  {"date": "2020-04-06", "service":"ws", "count":22},
+  {"date": "2020-04-06", "service":"kml", "count":7},
+]
+```
+
+
+The requested parameters (all case insensitive):
+
+ * UUID the uuid of the dataset
+ * start: YYYY-MM-DD format the start date, if the granularity is the week or month and the date is "in" the week/month, I take the beginning of the week/month
+ * end: YYYY-MM-DD format the end date, if the granularity is the week or month and the date is "in" the week/month, I take the weekend/month
+ * granularity: day, week, year.
+
+Pour la réponse :
+
+Dictionary table: one dictionary per granularity element (day, week, month)
+The dictionary contains:
+ * date: YYYY-MM-DD format the start date of the granularity element
+ * count: the number of times the resource has been viewed, regardless of the service (WMS/WFS...)
