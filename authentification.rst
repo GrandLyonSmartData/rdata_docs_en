@@ -6,9 +6,9 @@ Authentication
 Principles
 -------------------
 
-Some of the data published by the Data Services requires an authorization. In order to get one, you must create an account on the platform at http://data.grandlyon.com/creation-de-compte/ and specify the different datasets and access manner you require. 
+Some of the data published by the Data Services requires an authorization. In order to get one, you must create an account on the platform at http://data.grandlyon.com/inscription/ and specify the different datasets and access manner you require.
 
-Once this stage is completed, you'll get a login (generally the e-mail address used when creating the account) and a password. These are strictly personal, and they must be used, in the context of application development for third parties,  with some wariness. 
+Once this stage is completed, you'll get a login (generally the e-mail address used when creating the account) and a password. These are strictly personal, and they must be used, in the context of application development for third parties, with some wariness.
 
 But let's first see how to use these authentication elements to reach the restricted datasets.
 
