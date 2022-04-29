@@ -263,6 +263,19 @@ returns records 10 to 15 of gipdecheterie layer.
 
 The REST-JSON services are thus particularly adapted to the construction of values lists, tables and paginated grids, inside datasets GUI.
 
+Then, in a Django style, custom parameters in the form `fields__operator`, with field = target field name and operator to choose from eq, gt, gte, lt, lte, in
+
+Example: https://download.recette.data.grandlyon.com/ws/grandlyon/abr_arbres_aligner.abrarbre/all.json?codeinsee__eq=69116&commune__in=LIMONEST,BRON&dateplantation__gte=2009-03-01&gid__in=6795,6798
+
+The operators:
+* `eq` : (equal) equality
+* `gt`: (greater than) strictly greater than
+* `gte`: (greater than or equal)
+* `lt`: (lesser than) strictly less than
+* `lte`: (lesser than or equal) less than or equal
+* `in`: (in) in the list, the elements of the list are separated by commas.
+
+
 REST Services (CSV)
 -------------------
 
