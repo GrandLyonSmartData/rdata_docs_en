@@ -331,10 +331,11 @@ WMTS Service (Orthophotographs)
 Additional WMTS/WMS services exist broadcasting orthophotograph streams.
 
 They can be accessed here:
-* https://imagerie.data.grandlyon.com/all/wmts?service=WTMS&request=getcapabilities
-* https://imagerie.data.grandlyon.com/2154/wmts?service=WTMS&request=getcapabilities
-* https://imagerie.data.grandlyon.com/3857/wmts?service=WTMS&request=getcapabilities
-* https://imagerie.data.grandlyon.com/3946/wmts?service=WTMS&request=getcapabilities
+
+* https://imagerie.data.grandlyon.com/all/wmts?service=WMTS&request=getcapabilities
+* https://imagerie.data.grandlyon.com/2154/wmts?service=WMTS&request=getcapabilities
+* https://imagerie.data.grandlyon.com/3857/wmts?service=WMTS&request=getcapabilities
+* https://imagerie.data.grandlyon.com/3946/wmts?service=WMTS&request=getcapabilities
 
 These streams have a cache and are preferred over WMS streams available on https://download.data.grandlyon.com/wms/grandlyon
 
