@@ -41,7 +41,7 @@ Corresponding snippet :
               }
             });
             //Data service URL
-            var data_url = "https://download.data.grandlyon.com/wfs/rdata?";
+            var data_url = "https://data.grandlyon.com/geoserver/wfs?";
             //Proxy definition for cross-domain handling. Please refer to the Good Practices -> Proxyfication section for more information.
             OpenLayers.ProxyHost = "/cgi-bin/proxy.cgi?url=";
             
@@ -155,7 +155,7 @@ Corresponding source code :
             //Initialisation de la map
             var map = L.map('map').setView([45.76, 4.85], 14);
             //Layer WMS sur une orthophoto
-            L.tileLayer.wms("https://download.data.grandlyon.com/wms/grandlyon",{
+            L.tileLayer.wms("https://data.grandlyon.com/geoserver/wms",{
                     layers: '1840_5175_16_CC46',
                     format: 'image/png',
                     transparent: true,    
@@ -171,7 +171,7 @@ Corresponding source code :
             
             //Proxy definition for cross-domain handling. Please refer to the Good Practices -> Proxyfication section for more information.
 			var proxy = "proxy.php?url=";
-            var data_url = "https://download.data.grandlyon.com/wfs/rdata";
+            var data_url = "https://data.grandlyon.com/geoserver/wfs";
             var params = '?SERVICE=WFS
                 &REQUEST=GetFeature
                 &VERSION=1.1.0
@@ -316,8 +316,7 @@ Corresponding source code :
             
             //Ajout KML layer
             var KML_Layer = new google.maps.KmlLayer({
-              url: 'https://download.data.grandlyon.com/kml/grandlyon/?'
-                +'request=layer&typename=pvo_patrimoine_voirie.pvostationvelov'
+              url: 'https://data.grandlyon.com/geoserver/ows?SERVICE=WFS&VERSION=2.0.0&request=GetFeature&typename=sytral:tcl_sytral.tcllignebus_2_0_0&outputFormat=kml&SRSNAME=EPSG:4171&sortBy=gid'
             });
             KML_Layer.setMap(map);
       
@@ -340,21 +339,21 @@ In this example, we will use the server 2.0.1 of standard, which is the most rec
 
 **Step 1** : getting the service capabilities
 
-https://download.data.grandlyon.com/wcs/rdata?SERVICE=WCS&REQUEST=GetCapabilities&VERSION=2.0.1
+https://data.grandlyon.com/wcs?SERVICE=WCS&REQUEST=GetCapabilities&VERSION=2.0.1
 
 .. image:: _static/wcs_GetCapabilities.png
 
 Among the received information, one can discover the available output formats. WCS is a kind of service designed to provide raw data. Thus it is recommanded to use it with an output format able to handle full image definition, like **image/x-aaigrid** for monoband images or **image/tiff** for a multi-spectral raster file rather than the visualization output formats that are **image/jpeg** or **image/gif**. 
 
-In the last part of the returned XML document, we find the coverage list available from the service, and as part of it the **Carte_agglo_lyon_NO2_2012** coverage we will be using in the rest of this example.  
+In the last part of the returned XML document, we find the coverage list available from the service, and as part of it the **grandlyon:sTFONS_Step_02cm_2018** coverage we will be using in the rest of this example.  
 	
 **Step 2** : Coverages details 
 
-https://download.data.grandlyon.com/wcs/rdata?SERVICE=WCS&REQUEST=DescribeCoverage&VERSION=2.0.1&COVERAGEID=Carte_agglo_Lyon_NO2_2012
+https://data.grandlyon.com/geoserver/wcs?SERVICE=WCS&REQUEST=DescribeCoverage&VERSION=2.0.1&COVERAGEID=grandlyon:STFONS_Step_02cm_2018
 
 Caution ! In  the 2.0.1 version, the parameter used to indicate the requested coverage is **COVERAGEID**, but in version 1.0 it's **IDENTIFIER** and in version 1.1, it's **COVERAGE**. Yes, it's a lot of fun and provdes a lot a work for consultants. 
  
-Beware the coverage name case as well if you are manually testing the requests from a web browser : the WCS service is case sensitive. That way, the *Carte_agglo_lyon_NO2_2012* coverage (with lower case 'l') won't be found by the service. 
+Beware the coverage name case as well if you are manually testing the requests from a web browser : the WCS service is case sensitive. That way, the *grandlyon:sTFONS_Step_02cm_2018* coverage (with lower case 'l') won't be found by the service. 
 
 .. image:: _static/wcs_DescribeCoverage.png
 
@@ -364,24 +363,8 @@ This request lets you retrieve all the details of the specified coverage, like t
 
 The following request lets you retrieve a sample of the original raster image in TIFF format :
 
-https://download.data.grandlyon.com/wcs/rdata?SERVICE=WCS&VERSION=2.0.1&REQUEST=GetCoverage&FORMAT=image/tiff&COVERAGEID=Carte_agglo_Lyon_NO2_2012&SUBSET=x,http://www.opengis.net/def/crs/EPSG/0/2154(846414,847568)&SUBSET=y,http://www.opengis.net/def/crs/EPSG/0/2154(6521761,6522840)&OUTPUTCRS=urn:ogc:def:crs:EPSG::2154
+https://data.grandlyon.com/geoserver/wcs?SERVICE=WCS&VERSION=2.0.1&REQUEST=GetCoverage&FORMAT=image/tiff&COVERAGEID=grandlyon:STFONS_Step_02cm_2018
 
-A rendering of the output can be done with a colorization of the three bands :
-
-.. image:: _static/wcs_GetCoverageTiff.tif
-
-It is also possible to extract only one band from the original image using the RANGESUBSET parameter. This parameter allows you to pick the bands to use, to reorganize them etc. The simplest way is to indicate the band by its index (the firts band being indexed 1). It is also possible to mix references to bands with intervals. For instance : RANGESUBSET=1,3:5,7
-With only one band, we can then use the x-aaigrid (Arc/Info ASCII Grid) output format (as this probably won't work in a standard wbe browser, it would be better to try this URL with a tool like wget or cURL): 
-
-https://download.data.grandlyon.com/wcs/rdata?SERVICE=WCS&VERSION=2.0.1&REQUEST=GetCoverage&FORMAT=image/x-aaigrid&COVERAGEID=Carte_agglo_Lyon_NO2_2012&RANGESUBSET=1&SUBSET=x,http://www.opengis.net/def/crs/EPSG/0/2154(846414,847568)&SUBSET=y,http://www.opengis.net/def/crs/EPSG/0/2154(6521761,6522840)&OUTPUTCRS=urn:ogc:def:crs:EPSG::2154
-
-sample of the retrieved result :
-
-.. image:: _static/wcs_GetCoverageGrid.png
-
-Finally, it is also possible to use SUBSET with absolute pixels coordinates by using the &SUBSETTINGCRS=imageCRS parameter and value : 
-
-https://download.data.grandlyon.com/wcs/rdata?SERVICE=WCS&VERSION=2.0.1&REQUEST=GetCoverage&FORMAT=image/tiff&COVERAGEID=Carte_agglo_Lyon_NO2_2012&SUBSET=x(100,200)&SUBSET=y(100,200)&SUBSETTINGCRS=imageCRS
 
 
 
@@ -392,7 +375,7 @@ This example illustrates the usage of a CSW service to get information about the
 
 **Step 1** : Service capacities reading
 
-https://download.data.grandlyon.com/catalogue/srv/fre/csw?version=2.0.2&request=GetCapabilities&service=CSW
+https://data.grandlyon.com/geonetwork/srv/fre/csw?version=2.0.2&request=GetCapabilities&service=CSW
 
 XML document rendering example (from QGIS CSW plugin):
 
@@ -400,7 +383,7 @@ XML document rendering example (from QGIS CSW plugin):
 
 **Step 2** : Query with keywords (transport here)
 
-POST request : https://download.data.grandlyon.com/catalogue/srv/fre/csw
+POST request : https://data.grandlyon.com/geonetwork/srv/fre/csw
 with XML data embedded in the POST body : 
 
 .. code-block:: xml
@@ -505,7 +488,7 @@ Result presentation example (CSW plugin in QGIS) :
 
 **Step 3** : Query with keywords and a geographic extent. 
 
-POST request : https://download.data.grandlyon.com/catalogue/srv/fre/csw
+POST request : https://data.grandlyon.com/geonetwork/srv/fre/csw
 with POST data : 
 
 .. code-block:: xml
@@ -541,7 +524,7 @@ Result presentation example (CSW plugin in QGIS) :
 
 **Step 4** : Metadata retrieval from its ID
 
-https://download.data.grandlyon.com/catalogue/srv/fre/csw?outputFormat=application%2Fxml&service=CSW&outputSchema=http%3A%2F%2Fwww.opengis.net%2Fcat%2Fcsw%2F2.0.2&request=GetRecordById&version=2.0.2&elementsetname=full&id=f5b0fe8e-f9cf-4f3c-8684-6b55d6935f6f
+https://data.grandlyon.com/geonetwork/srv/fre/csw?outputFormat=application%2Fxml&service=CSW&outputSchema=http%3A%2F%2Fwww.opengis.net%2Fcat%2Fcsw%2F2.0.2&request=GetRecordById&version=2.0.2&elementsetname=full&id=f5b0fe8e-f9cf-4f3c-8684-6b55d6935f6f
 
 resulting XML :
 
