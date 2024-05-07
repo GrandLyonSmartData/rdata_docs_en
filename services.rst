@@ -281,7 +281,7 @@ REST Services (CSV)
 -------------------
 
 *Example* :
-https://data.grandlyon.com/fr/datapusher/ws/grandlyon/gip_proprete.gipdecheterie/all.csv?maxfeatures=5&start=10
+https://data.grandlyon.com/fr/datapusher/ws/grandlyon/gip_proprete.gipdecheterie_3_0_0/all.csv?maxfeatures=5&start=10
 
 In the same way that we request the JSON service, we can request a CSV extract by replacing the ".json" extension of the URL with ".csv".
 
@@ -346,7 +346,7 @@ These tiles can be used by the main web GIS frameworks (MaplibreGL, Leaflet,...)
 KML Services
 ------------
 GrandLyon Data also publishes the data in KML format. Data for each service is accessible from the following URL : 
-https://data.grandlyon.com/geoserver/ows?SERVICE=WFS&VERSION=2.0.0&request=GetFeature&typename=[schema].[name]&outputFormat=kml&SRSNAME=EPSG:4171&sortBy=gid
+https://data.grandlyon.com/geoserver/ows?SERVICE=WFS&VERSION=2.0.0&request=GetFeature&typename=[organisation:][schema].[name]&outputFormat=kml&SRSNAME=EPSG:4171&sortBy=gid
 
 Exemple* : https://data.grandlyon.com/geoserver/ows?SERVICE=WFS&VERSION=2.0.0&request=GetFeature&typename=sytral:tcl_sytral.tcllignebus_2_0_0&outputFormat=kml&SRSNAME=EPSG:4171&sortBy=gid
 
