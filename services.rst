@@ -294,7 +294,7 @@ An additional parameter "geometry=on" (off by default) adds a column "WKT" conta
 Shapefile export
 ----------------
 
-Shapefile export is available through WFS service by using SHAPEFILE format (for exemple : https://data.grandlyon.com/geoserver/sytral/ows?SERVICE=WFS&VERSION=2.0.0&request=GetFeature&typename=sytral:tcl_sytral.tcllignebus_2_0_0&outputFormat=SHAPE-ZIP&SRSNAME=EPSG:4171&format_options=CHARSET:UTF-8&sortBy=gid). Cela renvoie alors à l'utilisateur un zip contenant un shapefile (SHP + SHX + DBF) de la couche.
+Shapefile export is available through WFS service by using SHAPEFILE format (for exemple : https://data.grandlyon.com/geoserver/sytral/ows?SERVICE=WFS&VERSION=2.0.0&request=GetFeature&typename=sytral:tcl_sytral.tcllignebus_2_0_0&outputFormat=SHAPE-ZIP&SRSNAME=EPSG:4171&format_options=CHARSET:UTF-8&sortBy=gid). It returns a zip file containing the requested layer as a shapefile (SHP + SHX + DBF).
 
 WMTS Service
 ------------
