@@ -5,8 +5,11 @@ Authentication
 
 Principles
 -------------------
+Some of the data published by Data services require authorization to access it via API (to load it into a GIS like QGIS for example).
+In order to obtain one, you must open an account on GrandLyon Connect https://moncompte.grandlyon.com/login/ to connect to the data platform and then define your password for the data platform using the function ' change my password' on your account profile page https://data.grandlyon.com/onegeo-login/fr/profile/.
 
-Some of the data published by the Data Services requires an authorization. In order to get one, you must create an account on the platform at http://data.grandlyon.com/inscription/ and specify the different datasets and access manner you require.
+Please note that the passwords for your GrandLyon Connect account and the one you define for the platform can and should be different.
+
 
 Once this stage is completed, you'll get a login (generally the e-mail address used when creating the account) and a password. These are strictly personal, and they must be used, in the context of application development for third parties, with some wariness.
 
