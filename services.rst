@@ -386,40 +386,41 @@ Dataset statistics
 To query statistics, queries take the following form:
 `https://data.grandlyon.com/statistiques/dataset?start=2023-02-5&uuid=4d59a6fd-f99f-47af-a0d3-8f21082a45fa&layername=sytral:tcl_sytral.tcllignebus_2_0_0&granularity=month&end=2024-02-5`
 
-```json
-[
-  {"date": "2019-04-08", "service":"wms", "count":362},
-  {"date": "2019-04-08", "service":"wfs", "count":123},
-  {"date": "2019-04-08", "service":"ws", "count":12},
-  {"date": "2019-04-08", "service":"kml", "count":2},
-  {"date": "2019-04-15", "service":"wms", "count":364},
-  {"date": "2019-04-15", "service":"wfs", "count":125},
-  {"date": "2019-04-15", "service":"ws", "count":10},
-  {"date": "2019-04-15", "service":"kml", "count":4},
-  ...
-  {"date": "2020-03-30", "service":"wms", "count":462},
-  {"date": "2020-03-30", "service":"wfs", "count":223},
-  {"date": "2020-03-30", "service":"ws", "count":22},
-  {"date": "2020-03-30", "service":"kml", "count":50},
-  {"date": "2020-04-06", "service":"wms", "count":202},
-  {"date": "2020-04-06", "service":"wfs", "count":113},
-  {"date": "2020-04-06", "service":"ws", "count":22},
-  {"date": "2020-04-06", "service":"kml", "count":7},
-]
-```
+::
+
+  [
+    {"date": "2019-04-08", "service":"wms", "count":362},
+    {"date": "2019-04-08", "service":"wfs", "count":123},
+    {"date": "2019-04-08", "service":"ws", "count":12},
+    {"date": "2019-04-08", "service":"kml", "count":2},
+    {"date": "2019-04-15", "service":"wms", "count":364},
+    {"date": "2019-04-15", "service":"wfs", "count":125},
+    {"date": "2019-04-15", "service":"ws", "count":10},
+    {"date": "2019-04-15", "service":"kml", "count":4},
+    ...
+    {"date": "2020-03-30", "service":"wms", "count":462},
+    {"date": "2020-03-30", "service":"wfs", "count":223},
+    {"date": "2020-03-30", "service":"ws", "count":22},
+    {"date": "2020-03-30", "service":"kml", "count":50},
+    {"date": "2020-04-06", "service":"wms", "count":202},
+    {"date": "2020-04-06", "service":"wfs", "count":113},
+    {"date": "2020-04-06", "service":"ws", "count":22},
+    {"date": "2020-04-06", "service":"kml", "count":7},
+  ]
+
 
 
 The requested parameters (all case insensitive):
 
- * UUID the uuid of the dataset
- * layername of the dataset
- * start: YYYY-MM-DD format the start date, if the granularity is the week or month and the date is "in" the week/month, I take the beginning of the week/month
- * end: YYYY-MM-DD format the end date, if the granularity is the week or month and the date is "in" the week/month, I take the weekend/month
- * granularity: day, week, year.
+* UUID the uuid of the dataset
+* layername of the dataset
+* start: YYYY-MM-DD format the start date, if the granularity is the week or month and the date is "in" the week/month, I take the beginning of the week/month
+* end: YYYY-MM-DD format the end date, if the granularity is the week or month and the date is "in" the week/month, I take the weekend/month
+* granularity: day, week, year.
 
-Pour la réponse :
+For the answer:
 
-Dictionary table: one dictionary per granularity element (day, week, month)
-The dictionary contains:
- * date: YYYY-MM-DD format the start date of the granularity element
- * count: the number of times the resource has been viewed, regardless of the service (WMS/WFS...)
+Dictionary table: one dictionary per granularity element (day, week, month). The dictionary contains:
+
+* date: YYYY-MM-DD format the start date of the granularity element
+* count: the number of times the resource has been viewed, regardless of the service (WMS/WFS...)
