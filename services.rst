@@ -47,6 +47,23 @@ The generally used format in WFS is GML (which stands for Geographic Markup Lang
 
 https://data.grandlyon.com/geoserver/wfs?SERVICE=WFS&REQUEST=GetFeature&typename=pvo_patrimoine_voirie.pvotronconwebcriter&VERSION=1.1.0&OUTPUTFORMAT=geojson
 
+API Features Service
+--------------------
+
+The API Features is similar to WFS, but offers a more modern interface.
+
+The root of the service is https://data.grandlyon.com/geoserver/ogc/features/v1/
+
+An OpenAPI definition is available here : https://data.grandlyon.com/geoserver/ogc/features/v1/openapi?f=text%2Fhtml
+
+The following request lists the available datasets : https://data.grandlyon.com/geoserver/ogc/features/v1/collections
+
+The usual format returned by the API Features is GeoJSON, but it can be changed with the "f" parameter (for instance, f=application/gml+xml;version=3.2). Heres is an example URL to fetch a dataset :
+
+https://data.grandlyon.com/geoserver/ogc/features/v1/collections/metropole-de-lyon:pvo_patrimoine_voirie.pvotronconwebcriter/items?f=application%2Fjson&limit=50
+
+More information on the standard can be found here https://ogcapi.ogc.org/features/ and here https://opengeospatial.github.io/e-learning/ogcapi-features/text/basic-index.html
+
 WCS Service
 -----------
 The WCS Services (Web Coverage Service) allow you to directly retrieve the raw data of raster layers (like orthophotographies or DEM). The word Coverage matches the raster dataset. So it is indeed a download service applied to image datasources in which it is possible to filter the data to retrieve for only a part of the territory :
