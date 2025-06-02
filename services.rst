@@ -386,15 +386,15 @@ Geocoder Photon
 
 This service makes it possible to perform direct geocoding (conversion of a postal address or place name into geographical coordinates) and reverse (conversion of geographical coordinates into postal address or place name).
 
-It is powered by the Open-Source tool Photon (see https://github.com/komoot/photon), powered by OpenStreetMap data relating to the former Rhône-Alpes region (see https://download.geofabrik.de/europe/france/rhone-alpes.html).
+It is powered by the Open-Source tool Photon (see https://github.com/komoot/photon), powered by address data from the Métropole de Lyon, published on the National Address Database (https://data.grandlyon.com/portail/fr/jeux-de-donnees/base-adresse-locale-metropole-lyon-bal).
 
 The official documentation for Photon's search API is populated on GitHub, https://github.com/komoot/photon#search-api.
 
 The link to make a query is as follows (replace the.. with the place to geocode):
-https://download.data.grandlyon.com/geocoding/photon/api?q=...
+https://download.data.grandlyon.com/geocoding/photon-bal/api?q=...
 Examples:
-https://download.data.grandlyon.com/geocoding/photon/api?q=lyon
-https://download.data.grandlyon.com/geocoding/photon/api?q=%22Rue%20garibaldi%22
+https://download.data.grandlyon.com/geocoding/photon-bal/api?q=lyon
+https://download.data.grandlyon.com/geocoding/photon-bal/api?q=%22Rue%20garibaldi%22
 
 
 Dataset statistics
