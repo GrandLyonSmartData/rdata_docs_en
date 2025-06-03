@@ -358,6 +358,165 @@ This PHP script does exactly the same :
 	?> 
 
 
+-------------
+Opening hours
+-------------
+
+Historically, the data published on data.grandlyon.com displays opening
+hours in a non-uniform way:
+
+* in the ‘openinghours’ attribute, using the `openinghours format <https://schema.org/openingHours>`_, if present in the table
+* in the ‘openinghoursspecification’ attribute, using the `openinghoursspecification format <https://schema.org/OpeningHoursSpecification>`_, if present in the table
+
+To standardize and simplify the handling of opening hours, the Métropole has added a new attribute ‘horaires’ using the `OSM opening hours format <https://wiki.openstreetmap.org/wiki/Key:opening_hours/specification>`_.
+
+   The Métropole encourages switching to the `OSM opening hours format <https://wiki.openstreetmap.org/wiki/Key:opening_hours/specification>`_ as soon as possible.
+
+The Métropole provides opening hours for both the current year (N) and the following year (N+1). The responsibility for determining whether a place is currently open or closed lies with the data consumer.
+
+Documentation
+-------------
+
+Here are useful resources for understanding the OSM opening hours format:
+
+* `french version <https://wiki.openstreetmap.org/wiki/FR:Key:opening_hours>`_
+* `english specification <https://wiki.openstreetmap.org/wiki/Key:opening_hours/specification>`_ (more complete)
+* `evaluation tool <https://openingh.openstreetmap.de/evaluation_tool/?lng=fr>`_
+* `entry and evaluation tool <https://projets.pavie.info/yohours/>`_
+
+Usage by the Métropole vs Official Specification
+------------------------------------------------
+
+To simplify the use of opening hours, the Métropole does not use the full capabilities of the `OSM opening hours format <https://wiki.openstreetmap.org/wiki/Key:opening_hours/specification>`_.
+
+Hours Display
+~~~~~~~~~~~~~
+
+Opening hours are presented as fragments, separated by semicolons. Each fragment corresponds to a period or a specific day. The fragments always appear in the following order:
+
+* default hours (openinghours)
+* specific date ranges (e.g., holidays or closure periods), listed chronologically
+* specific dates (e.g., public holidays or maintenance days), also listed chronologically
+
+   In accordance with the format, each fragment overrides the previous ones. For instance, public holiday hours take precedence over default hours.
+
+Below is a reformulation with examples.
+
+The first fragment contains the default hours (e.g., ``Mo-Fr 09:00-12:00,14:00-17:00, Sa 09:00-17:00``). It includes no date and corresponds to the openinghours attribute.
+
+Chronologically listed specific date ranges follow (e.g., ``2023 Apr 01-2023 Oct 30 Mo-Fr 08:30-12:00,13:30-18:00, Sa 08:30-18:30``)
+
+Then come specific dates, also listed in chronological order: ``2023 Apr 10 closed "Easter Monday"; 2023 May 01 closed "Labour Day"``
+
+Any fragment can include comments. Public holiday and school holiday names are automatically included as comments at the end of the fragment.
+
+Simplifying Considerations
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The `OSM opening hours format <https://wiki.openstreetmap.org/wiki/Key:opening_hours/specification>`_ allows for a wide range of schedule entries. The Métropole restricts its use to facilitate reuse and standardize the presentation.
+
+The description style follows this structure:
+
+   <date range>|<date> <hours> <comment>
+
+Allowed keywords are limited to: ‘24/7’ or ‘24/7 open’ (not ‘24/7 closed’, which will be represented by a missing value: horaires = NULL)
+
+The following are not used and will trigger a notification if detected:
+
+* <rule_modifier> values off and unknown
+* if <selector_sequence> is ‘24/7’, the <rule_modifier> ‘closed’ is not used — the schedule is omitted
+* in <timespan>, only <time> is used (not <extended_time>, <variable_time>, or <event>)
+* in <weekday_selector>, only <weekday_sequence> is used (no <holiday_sequence>; keywords like ‘PH’, ‘SH’, ‘easter’ are replaced with specific date ranges)
+* <day_offset> in <weekday_range> is not used
+* <week_selector> is not used
+* <date_offset> in <monthday_range> is not used
+* <variable_date> in <date_from> is not used
+* in <year_selector>, only <year_range> = <year> is used, and the year is always given with at least one month
+
+Complex Cases
+~~~~~~~~~~~~~
+
+Some cases may use a <wday>[] (e.g., ‘Tu[1]’ or ‘Sa[-1]’, as seen in some town hall datasets).
+
+It is also possible (though rare) that the same date range appears more than once due to a rule overriding a previous one:
+
+``2023 Feb 04-2023 Feb 19 Mo-Fr 08:30-12:30,13:30-16:45 "Vacances d'Hiver"; 2023 Feb 04-2023 Feb 19 Tu[1] 08:30-12:00,14:30-16:45 "Vacances d'Hiver"``
+
+This example is outdated but could still occur.
+
+Such complexity may lead to differences between the ‘horaires’ and the ‘openinghoursspecification’ attributes. When the schedules are too complex for the current processing method of the Métropole, they are simplified. For example, the entry ``Sa 09:00-11:45; Sa[-1] closed`` will be translated to ``Sa 09:00-11:45`` in ‘openinghoursspecification’ attribute in the Métropole’s data.
+
+   The Métropole encourages switching to the `OSM opening hours format <https://wiki.openstreetmap.org/wiki/Key:opening_hours/specification>`_ as soon as possible.
+
+Examples
+--------
+
+Waste Collection Centers
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+=========== ================ =============== ============================================================= ========== ========
+ID          name             type            horaires                                                      start_date end_date
+=========== ================ =============== ============================================================= ========== ========
+1           Caluire-et-Cuire Classique       Lu-Ve 09:00-12:00,14:00-17:00, Sa 09:00-17:00, Di 09:00-12:00
+1           Caluire-et-Cuire Classique       Lu-Ve 08:30-12:00,13:30-18:00, Sa 08:30-18:30, Di 09:00-12:00 04-01      10-30
+1           Caluire-et-Cuire Classique                                                                     Fériés
+1           Caluire-et-Cuire Classique       09:00-12:00,14:00-16:00                                       12-24
+1           Caluire-et-Cuire Classique       09:00-12:00,14:00-16:00                                       12-31
+20          Lyon 5           Fluviale        Sa 10:00-16:00
+20          Lyon 5           Fluviale        Sa 09:00-18:00                                                04-01      10-30
+21          Lyon 1           Mobile          Ve 14:00-20:00                                                2022-09-01
+21          Lyon 1           Mobile          Ve 14:00-20:00                                                2022-10-07
+21          Lyon 1           Mobile          Ve 14:00-20:00                                                2022-11-04
+21          Lyon 1           Mobile          Ve 14:00-20:00                                                2022-12-02
+=========== ================ =============== ============================================================= ========== ========
+
+result in OSM Opening Hours format
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+For waste center 1 (Caluire):
+
+``Mo-Fr 09:00-12:00,14:00-17:00, Sa 09:00-17:00, Su 09:00-12:00; 2023 Apr 01-2023 Oct 30 Mo-Fr 08:30-12:00,13:30-18:00, Sa 08:30-18:30, Su 09:00-12:00; 2024 Apr 01-2024 Oct 30 Mo-Fr 08:30-12:00,13:30-18:00, Sa 08:30-18:30, Su 09:00-12:00; 2023 Apr 10 closed "Lundi de Pâques"; 2023 May 01 closed "1er mai"; 2023 May 08 closed "8 mai"; 2023 May 18 closed "Ascension"; 2023 May 29 closed "Lundi de Pentecôte"; 2023 Jul 14 closed "14 juillet"; 2023 Aug 15 closed "Assomption"; 2023 Nov 01 closed "Toussaint"; 2023 Nov 11 closed "11 novembre"; 2023 Dec 24 Su 09:00-12:00,14:00-16:00; 2023 Dec 25 closed "Jour de Noël"; 2023 Dec 31 Su 09:00-12:00,14:00-16:00; 2024 Jan 01 closed "1er janvier"; 2024 Apr 01 closed "Lundi de Pâques"; 2024 May 01 closed "1er mai"; 2024 May 08 closed "8 mai"; 2024 May 09 closed "Ascension"; 2024 May 20 closed "Lundi de Pentecôte"; 2024 Jul 14 closed "14 juillet"; 2024 Aug 15 closed "Assomption"; 2024 Nov 01 closed "Toussaint"; 2024 Nov 11 closed "11 novembre"; 2024 Dec 24 Tu 09:00-12:00,14:00-16:00; 2024 Dec 25 closed "Jour de Noël"; 2024 Dec 31 Tu 09:00-12:00,14:00-16:00``
+
+The structure:
+
+* default opening hours ``Mo-Fr 09:00-12:00,14:00-17:00, Sa 09:00-17:00, Su 09:00-12:00``
+* specific date ranges, in chronological order ``2023 Apr 01-2023 Oct 30 Mo-Fr 08:30-12:00,13:30-18:00, Sa 08:30-18:30, Su 09:00-12:00; 2024 Apr 01-2024 Oct 30 Mo-Fr 08:30-12:00,13:30-18:00, Sa 08:30-18:30, Su 09:00-12:00``
+* specific dates, in chronological order (including public holidays and exceptional opening hours on Dec 24 and 31) ``2023 Apr 10 closed "Lundi de Pâques"; 2023 May 01 closed "1er mai"; 2023 May 08 closed "8 mai"; 2023 May 18 closed "Ascension"; 2023 May 29 closed "Lundi de Pentecôte"; 2023 Jul 14 closed "14 juillet"; 2023 Aug 15 closed "Assomption"; 2023 Nov 01 closed "Toussaint"; 2023 Nov 11 closed "11 novembre"; 2023 Dec 24 Su 09:00-12:00,14:00-16:00; 2023 Dec 25 closed "Jour de Noël"; 2023 Dec 31 Su 09:00-12:00,14:00-16:00; 2024 Jan 01 closed "1er janvier"; 2024 Apr 01 closed "Lundi de Pâques"; 2024 May 01 closed "1er mai"; 2024 May 08 closed "8 mai"; 2024 May 09 closed "Ascension"; 2024 May 20 closed "Lundi de Pentecôte"; 2024 Jul 14 closed "14 juillet"; 2024 Aug 15 closed "Assomption"; 2024 Nov 01 closed "Toussaint"; 2024 Nov 11 closed "11 novembre"; 2024 Dec 24 Tu 09:00-12:00,14:00-16:00; 2024 Dec 25 closed "Jour de Noël"; 2024 Dec 31 Tu 09:00-12:00,14:00-16:00``
+
+Town Halls
+~~~~~~~~~~
+
+=========== ========================== ========================================================================================================= ======================== ========
+ID          name                       horaires                                                                                                  start_date               end_date
+=========== ========================== ========================================================================================================= ======================== ========
+S1324       Mairie d'Albigny-Sur-Saône Lu-Fr 08:30-12:30, Lu,Me 13:30-17:30, Ma,Je 08:30-12:30 "sur rendez-vous uniquement", Sa 09:00-12:00
+S1324       Mairie d'Albigny-Sur-Saône Lu-Fr 08:30-12:30, Lu,Me 13:30-17:30, Ma,Je 08:30-12:30 "sur rendez-vous uniquement", Fr 13:30-16:30      Vacances de la Toussaint
+S1324       Mairie d'Albigny-Sur-Saône Lu-Fr 08:30-12:30, Lu,Me 13:30-17:30, Ma,Je 08:30-12:30 "sur rendez-vous uniquement", Fr 13:30-16:30      Vacances de Noël
+S1324       Mairie d'Albigny-Sur-Saône Lu-Fr 08:30-12:30, Lu,Me 13:30-17:30, Ma,Je 08:30-12:30 "sur rendez-vous uniquement", Fr 13:30-16:30      Vacances d'Hiver
+S1324       Mairie d'Albigny-Sur-Saône Lu-Fr 08:30-12:30, Lu,Me 13:30-17:30, Ma,Je 08:30-12:30 "sur rendez-vous uniquement", Fr 13:30-16:30      Vacances de Printemps
+S1324       Mairie d'Albigny-Sur-Saône                                                                                                           Fériés
+S1326       Mairie de Bron             Lu-Ve 08:30-12:00, Lu,Me,Je,Ve 13:30-17:00, Ma 13:30-18:30
+S1326       Mairie de Bron                                                                                                                       Fériés
+S1376       Mairie de La Mulatière     Lu-Ve 08:45-12:30, Ma,Je,Ve 13:30-17:00, Me 13:30-16:30, Sa[1,3] 09:00-11:45 "uniquement sur rendez-vous"
+S1376       Mairie de La Mulatière                                                                                                               Fériés
+S1392       Mairie de Montanay         Lu-Ve 08:30-12:00, Lu,Ma,Je,Ve 15:00-17:00, Sa 09:00-11:45, Sa[-1] closed
+S1392       Mairie de Montanay                                                                                                                   Fériés
+S1392       Mairie de Montanay                                                                                                                   Vacances
+=========== ========================== ========================================================================================================= ======================== ========
+
+result in OSM Opening Hours format
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+For town hall S1324 (Albigny):
+
+``Mo-Fr 08:30-12:30, Mo,We 13:30-17:30, Tu,Th 08:30-12:30 "sur rendez-vous uniquement", Sa 09:00-12:00; 2023 Feb 04-2023 Feb 19 Mo-Fr 08:30-12:30, Mo,We 13:30-17:30, Tu,Th 08:30-12:30 "sur rendez-vous uniquement", Fr 13:30-16:30 "Vacances d'Hiver"; 2023 Apr 08-2023 Apr 23 Mo-Fr 08:30-12:30, Mo,We 13:30-17:30, Tu,Th 08:30-12:30 "sur rendez-vous uniquement", Fr 13:30-16:30 "Vacances de Printemps"; 2023 Oct 21-2023 Nov 05 Mo-Fr 08:30-12:30, Mo,We 13:30-17:30, Tu,Th 08:30-12:30 "sur rendez-vous uniquement", Fr 13:30-16:30 "Vacances de la Toussaint"; 2023 Dec 23-2024 Jan 07 Mo-Fr 08:30-12:30, Mo,We 13:30-17:30, Tu,Th 08:30-12:30 "sur rendez-vous uniquement", Fr 13:30-16:30 "Vacances de Noël"; 2024 Feb 17-2024 Mar 03 Mo-Fr 08:30-12:30, Mo,We 13:30-17:30, Tu,Th 08:30-12:30 "sur rendez-vous uniquement", Fr 13:30-16:30 "Vacances d'Hiver"; 2024 Apr 13-2024 Apr 28 Mo-Fr 08:30-12:30, Mo,We 13:30-17:30, Tu,Th 08:30-12:30 "sur rendez-vous uniquement", Fr 13:30-16:30 "Vacances de Printemps"; 2024 Oct 19-2024 Nov 03 Mo-Fr 08:30-12:30, Mo,We 13:30-17:30, Tu,Th 08:30-12:30 "sur rendez-vous uniquement", Fr 13:30-16:30 "Vacances de la Toussaint"; 2024 Dec 21-2025 Jan 05 Mo-Fr 08:30-12:30, Mo,We 13:30-17:30, Tu,Th 08:30-12:30 "sur rendez-vous uniquement", Fr 13:30-16:30 "Vacances de Noël"; 2023 Apr 10 closed "Lundi de Pâques"; 2023 May 01 closed "1er mai"; 2023 May 08 closed "8 mai"; 2023 May 18 closed "Ascension"; 2023 May 29 closed "Lundi de Pentecôte"; 2023 Jul 14 closed "14 juillet"; 2023 Aug 15 closed "Assomption"; 2023 Nov 01 closed "Toussaint"; 2023 Nov 11 closed "11 novembre"; 2023 Dec 25 closed "Jour de Noël"; 2024 Jan 01 closed "1er janvier"; 2024 Apr 01 closed "Lundi de Pâques"; 2024 May 01 closed "1er mai"; 2024 May 08 closed "8 mai"; 2024 May 09 closed "Ascension"; 2024 May 20 closed "Lundi de Pentecôte"; 2024 Jul 14 closed "14 juillet"; 2024 Aug 15 closed "Assomption"; 2024 Nov 01 closed "Toussaint"; 2024 Nov 11 closed "11 novembre"; 2024 Dec 25 closed "Jour de Noël"``
+
+The structure:
+
+* default opening hours ``Mo-Fr 08:30-12:30, Mo,We 13:30-17:30, Tu,Th 08:30-12:30 "sur rendez-vous uniquement", Sa 09:00-12:00``
+* specific date ranges, in chronological order ``2023 Feb 04-2023 Feb 19 Mo-Fr 08:30-12:30, Mo,We 13:30-17:30, Tu,Th 08:30-12:30 "sur rendez-vous uniquement", Fr 13:30-16:30 "Vacances d'Hiver"; 2023 Apr 08-2023 Apr 23 Mo-Fr 08:30-12:30, Mo,We 13:30-17:30, Tu,Th 08:30-12:30 "sur rendez-vous uniquement", Fr 13:30-16:30 "Vacances de Printemps"; 2023 Oct 21-2023 Nov 05 Mo-Fr 08:30-12:30, Mo,We 13:30-17:30, Tu,Th 08:30-12:30 "sur rendez-vous uniquement", Fr 13:30-16:30 "Vacances de la Toussaint"; 2023 Dec 23-2024 Jan 07 Mo-Fr 08:30-12:30, Mo,We 13:30-17:30, Tu,Th 08:30-12:30 "sur rendez-vous uniquement", Fr 13:30-16:30 "Vacances de Noël"; 2024 Feb 17-2024 Mar 03 Mo-Fr 08:30-12:30, Mo,We 13:30-17:30, Tu,Th 08:30-12:30 "sur rendez-vous uniquement", Fr 13:30-16:30 "Vacances d'Hiver"; 2024 Apr 13-2024 Apr 28 Mo-Fr 08:30-12:30, Mo,We 13:30-17:30, Tu,Th 08:30-12:30 "sur rendez-vous uniquement", Fr 13:30-16:30 "Vacances de Printemps"; 2024 Oct 19-2024 Nov 03 Mo-Fr 08:30-12:30, Mo,We 13:30-17:30, Tu,Th 08:30-12:30 "sur rendez-vous uniquement", Fr 13:30-16:30 "Vacances de la Toussaint"; 2024 Dec 21-2025 Jan 05 Mo-Fr 08:30-12:30, Mo,We 13:30-17:30, Tu,Th 08:30-12:30 "sur rendez-vous uniquement", Fr 13:30-16:30 "Vacances de Noël"``
+* specific dates, in chronological order ``2023 Apr 10 closed "Lundi de Pâques"; 2023 May 01 closed "1er mai"; 2023 May 08 closed "8 mai"; 2023 May 18 closed "Ascension"; 2023 May 29 closed "Lundi de Pentecôte"; 2023 Jul 14 closed "14 juillet"; 2023 Aug 15 closed "Assomption"; 2023 Nov 01 closed "Toussaint"; 2023 Nov 11 closed "11 novembre"; 2023 Dec 25 closed "Jour de Noël"; 2024 Jan 01 closed "1er janvier"; 2024 Apr 01 closed "Lundi de Pâques"; 2024 May 01 closed "1er mai"; 2024 May 08 closed "8 mai"; 2024 May 09 closed "Ascension"; 2024 May 20 closed "Lundi de Pentecôte"; 2024 Jul 14 closed "14 juillet"; 2024 Aug 15 closed "Assomption"; 2024 Nov 01 closed "Toussaint"; 2024 Nov 11 closed "11 novembre"; 2024 Dec 25 closed "Jour de Noël"``
+
 ------------
 Sum up
 ------------
