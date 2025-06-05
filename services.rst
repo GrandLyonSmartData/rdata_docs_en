@@ -384,17 +384,125 @@ QGis can also read these tiles using the "Vector Tiles Reader" plugin. QGIS 3.20
 Geocoder Photon
 ---------------
 
-This service makes it possible to perform direct geocoding (conversion of a postal address or place name into geographical coordinates) and reverse (conversion of geographical coordinates into postal address or place name).
+This service makes it possible to perform direct geocoding (conversion of a postal address or place name into geographical coordinates, , `example <https://download.data.grandlyon.com/geocoding/photon-bal/api?q=208bis%20rue%20garibaldi,%20lyon>`_) and reverse geocoding (conversion of geographical coordinates into postal address or place name, `example <https://download.data.grandlyon.com/geocoding/photon-bal/reverse?lon=4.8459162&lat=45.6615222&limit=10&radius=0.1>`_).
 
-It is powered by the Open-Source tool Photon (see https://github.com/komoot/photon), powered by address data from the Métropole de Lyon, published on the National Address Database (https://data.grandlyon.com/portail/fr/jeux-de-donnees/base-adresse-locale-metropole-lyon-bal).
+It is powered by the Open-Source tool Photon (see https://github.com/komoot/photon#photon-api) and uses:
 
-The official documentation for Photon's search API is populated on GitHub, https://github.com/komoot/photon#search-api.
+* addresses from the National Address Database (`BAN <https://adresse.data.gouv.fr>`_) in the Métropole de Lyon and the departments 01, 38, and 69
+* points of interest within the Métropole de Lyon, published through `Data Grand Lyon <https://data.grandlyon.com>`_ (see 'Points of Interest' section below).
 
-The link to make a query is as follows (replace the.. with the place to geocode):
+The Photon instance (photon-bal) exposed by the Métropole de Lyon is available at the following endpoint:
+
+https://download.data.grandlyon.com/geocoding/photon-bal/
+
+The link to make a geocoding query is as follows (replace the.. with the place to geocode):
+
 https://download.data.grandlyon.com/geocoding/photon-bal/api?q=...
+
 Examples:
+
 https://download.data.grandlyon.com/geocoding/photon-bal/api?q=lyon
 https://download.data.grandlyon.com/geocoding/photon-bal/api?q=%22Rue%20garibaldi%22
+
+Returned results include OpenStreetMap (OSM) tags based on object types:
+
+* for address points: "osm_key": "place", "osm_value": "house" (e.g., when searching for "37 rue du Repos, Lyon"),
+* for streets: "osm_key": "highway", "osm_value": "street" (e.g., when searching for "Rue du Repos, Lyon"),
+* for cities: "osm_key": "place", "osm_value": "city" (e.g., when searching for "Villeurbanne"),
+* for points of interest, specific OSM tags are described in the 'Points of Interest' section below.
+
+INSEE Code of the Municipality
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+By default, Photon returns only the postal code of the municipality. In the 'properties' fragment of the response, the tag 'extra' -> 'insee' has been added, containing the INSEE code of the municipality. This tag is a 5-character string to handle Ain department (01).
+
+In the example below, the API response contains: "extra": {"insee": "69383", "metropole": "true"}
+
+https://download.data.grandlyon.com/geocoding/photon-bal/api?q=208bis%20rue%20garibaldi,%20lyon
+
+Métropole/Non-Métropole Addresses
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The photon instance allows querying addresses within the Métropole de Lyon and neighboring departments (01, 38, 69).
+
+To differentiate between these two types of addresses (Métropole or non-Métropole), a tag 'extra' -> 'metropole' has been added in the 'properties' fragment of the response. This tag is a boolean, which takes the value 'true' (Métropole address) or is absent (non-Métropole address).
+
+In the following example, within the Métropole, the API response contains: "extra": {"insee": "69383", "metropole": "true"}
+
+https://download.data.grandlyon.com/geocoding/photon-bal/api?q=208bis%20rue%20garibaldi,%20lyon
+
+In the following example, outside the Métropole, the API response does not contain the 'metropole' tag but includes: "extra": {"insee": "69264"}
+
+https://download.data.grandlyon.com/geocoding/photon-bal/api?q=316%20rue%20montesquieu,%20villefranche
+
+Points of Interest
+~~~~~~~~~~~~~~~~~~
+
+The photon instance primarily contains addresses. A need was identified to locate points of interest within the metropolitan area (excluding municipalities outside the Métropole). For example, being able to locate the Blandan park.
+
+In addition to addresses, points of interest have been added, featuring specific OSM (Open Street Map) tags.
+
+Searching for a point of interest returns results with different tags:
+
+https://download.data.grandlyon.com/geocoding/photon-bal/api?q=parc%20blandan
+
+Depending on the type of point of interest, the result includes a specific tag and tag value, corresponding to those used in OpenStreetMap data usage. Below is a list of utilized point of interest types, their data source on the portal, associated OSM tags, and their values:
+
+=============================================================================================================== ======= =============== ======================================================================================================================================
+Point of Interest                                                                                               OSM tag tag value       example
+=============================================================================================================== ======= =============== ======================================================================================================================================
+`Parks and Gardens <https://data.grandlyon.com/portail/fr/jeux-de-donnees/parcs-jardins-metropole-lyon>`_       leisure park            `example <https://download.data.grandlyon.com/geocoding/photon-bal/api?q=parc%20blandan>`_
+`Town Halls <https://data.grandlyon.com/portail/fr/jeux-de-donnees/mairies-metropole-lyon-point-interet-v2>`_   amenity townhall        `example <https://download.data.grandlyon.com/geocoding/photon-bal/api?q=mairie%20de%20bron>`_
+`Métropole Houses <https://data.grandlyon.com/portail/fr/jeux-de-donnees/maisons-metropole-lyon>`_              amenity social_facility `example <https://download.data.grandlyon.com/geocoding/photon-bal/api?q=maison%20de%20la%20m%C3%A9tropole%20-%20givors>`_
+`Swimming Pools <https://data.grandlyon.com/portail/fr/jeux-de-donnees/piscines-metropole-lyon-point-interet>`_ leisure sports_centre   `example <https://download.data.grandlyon.com/geocoding/photon-bal/api?q=centre%20nautique%20tony>`_
+=============================================================================================================== ======= =============== ======================================================================================================================================
+
+To differentiate between addresses and points of interest, the 'extra' tag has been enriched with a tag 'extra' -> 'espace_public'. This tag is a boolean, which takes the value 'true' (if the returned object is a point of interest) or is absent (if it's an address or street).
+
+Oullins-Pierre-Bénite
+~~~~~~~~~~~~~~~~~~~~~
+
+Since January 1st 2024, the municipalities of Oullins and Pierre-Bénite have merged to form Oullins-Pierre-Bénite. However, these municipalities present about a hundred duplicate addresses, causing filtering issues in results.
+
+To filter query results located in 'Oullins-Pierre-Bénite', a tag 'district' has been added in the 'properties' fragment. It contains the name of the former municipality ('Oullins' or 'Pierre-Bénite') and allows filtering results. The 'postcode' tag also differentiates the two former municipalities (69600 for Oullins, 69310 for Pierre-Bénite).
+
+For example:
+
+https://download.data.grandlyon.com/geocoding/photon-bal/api?q=14%20boulevard%20de%20l%27europe,%20pierre-b%C3%A9nite
+
+Contains the tag "district": "Pierre-Bénite" and the tag "postcode": "69310"
+
+Location Bias
+~~~~~~~~~~~~~
+
+Expanding the volume of addresses may require centering the search on a specific area (e.g., a search centered on Lyon to prioritize addresses within the Métropole). To achieve this, it's possible to use location bias.
+
+Komoot's documentation describes the use of location bias:
+
+https://github.com/komoot/photon/?tab=readme-ov-file#search-with-location-bias
+
+Using bias allows prioritizing addresses based on their proximity to the provided coordinates.
+
+https://download.data.grandlyon.com/geocoding/photon-bal/api?q=rue%20lamartine
+
+https://download.data.grandlyon.com/geocoding/photon-bal/api?q=rue%20lamartine&lat=45.75&lon=4.84
+
+Tag Filtering
+~~~~~~~~~~~~~
+
+With photon, it's possible to search using specific OSM tags. For example, if searching for "Rue du Repos, Lyon" and wishing to return only the street and not address points, you can append the query with the osm_tag parameter:
+
+https://download.data.grandlyon.com/geocoding/photon-bal/api?q=rue%20du%20repos,%20lyon&osm_tag=highway:street
+
+Therefore, it's possible to query points of interest using tags. For example, results for 'townhall' in Bron return points of interest matching this tag:
+
+https://download.data.grandlyon.com/geocoding/photon-bal/api?q=bron&osm_tag=amenity:townhall
+
+Refer to the photon documentation:
+
+https://github.com/komoot/photon/?tab=readme-ov-file#filter-results-by-tags-and-values
+
+Currently, photon does not allow filtering on extra tags. This enhancement has been requested by the user community to Komoot.
 
 
 Dataset statistics
