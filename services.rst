@@ -409,7 +409,7 @@ Returned results include OpenStreetMap (OSM) tags (osm_key) and tag values (osm_
 ================= ======= =========== ====================== ==========================================================================================================
 object type       OSM tag tag value   display                example
 ================= ======= =========== ====================== ==========================================================================================================
-address           place   house       housenumer + street    `example <https://download.data.grandlyon.com/geocoding/photon-bal/api?q=37%20rue%20du%20Repos,%20Lyon>`_
+address           place   house       housenumber + street   `example <https://download.data.grandlyon.com/geocoding/photon-bal/api?q=37%20rue%20du%20Repos,%20Lyon>`_
 street            highway street      street                 `example <https://download.data.grandlyon.com/geocoding/photon-bal/api?q=rue%20du%20Repos,%20Lyon>`_
 city              place   city        city                   `example <https://download.data.grandlyon.com/geocoding/photon-bal/api?q=Villeurbanne>`_
 ================= ======= =========== ====================== ==========================================================================================================
