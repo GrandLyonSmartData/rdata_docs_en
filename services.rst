@@ -404,12 +404,18 @@ Examples:
 https://download.data.grandlyon.com/geocoding/photon-bal/api?q=lyon
 https://download.data.grandlyon.com/geocoding/photon-bal/api?q=%22Rue%20garibaldi%22
 
-Returned results include OpenStreetMap (OSM) tags based on object types:
+Returned results include OpenStreetMap (OSM) tags (osm_key) and tag values (osm_value) based on object types:
 
-* for address points: "osm_key": "place", "osm_value": "house" (e.g., when searching for "37 rue du Repos, Lyon"),
-* for streets: "osm_key": "highway", "osm_value": "street" (e.g., when searching for "Rue du Repos, Lyon"),
-* for cities: "osm_key": "place", "osm_value": "city" (e.g., when searching for "Villeurbanne"),
-* for points of interest, specific OSM tags are described in the 'Points of Interest' section below.
+================= ======= =========== ====================== ==========================================================================================================
+object type       OSM tag tag value   display                example
+================= ======= =========== ====================== ==========================================================================================================
+address           place   house       housenumer + street    `example <https://download.data.grandlyon.com/geocoding/photon-bal/api?q=37%20rue%20du%20Repos,%20Lyon>`_
+street            highway street      street                 `example <https://download.data.grandlyon.com/geocoding/photon-bal/api?q=rue%20du%20Repos,%20Lyon>`_
+city              place   city        city                   `example <https://download.data.grandlyon.com/geocoding/photon-bal/api?q=Villeurbanne>`_
+
+Note that the tag value is also included in the 'type' attribute of the API response.
+
+For points of interest, specific OSM tags are described in the 'Points of Interest' section below.
 
 INSEE Code of the Municipality
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -456,6 +462,8 @@ Point of Interest                                                               
 `Métropole Houses <https://data.grandlyon.com/portail/fr/jeux-de-donnees/maisons-metropole-lyon>`_              amenity social_facility `example <https://download.data.grandlyon.com/geocoding/photon-bal/api?q=maison%20de%20la%20m%C3%A9tropole%20-%20givors>`_
 `Swimming Pools <https://data.grandlyon.com/portail/fr/jeux-de-donnees/piscines-metropole-lyon-point-interet>`_ leisure sports_centre   `example <https://download.data.grandlyon.com/geocoding/photon-bal/api?q=centre%20nautique%20tony>`_
 =============================================================================================================== ======= =============== ======================================================================================================================================
+
+Regarding points of interest, the main name of the point is contained in the 'name' attribute, but it may be useful to display the address and/or the municipality depending on the application.
 
 To differentiate between addresses and points of interest, the 'extra' tag has been enriched with a tag 'extra' -> 'espace_public'. This tag is a boolean, which takes the value 'true' (if the returned object is a point of interest) or is absent (if it's an address or street).
 
