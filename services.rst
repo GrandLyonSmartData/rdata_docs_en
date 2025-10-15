@@ -466,6 +466,8 @@ Point of Interest                                                               
 
 Regarding points of interest, the main name of the point is contained in the 'name' attribute, but it may be useful to display the address and/or the municipality depending on the application.
 
+For certain points of interest, the 'alt_name' tag has been added containing the alternative names of the places (e.g., 'Piscine du Rhône' for the 'Centre nautique Tony Bertrand'), which allows them to be found in Photon.
+
 To differentiate between addresses and points of interest, the 'extra' tag has been enriched with a tag 'extra' -> 'espace_public'. This tag is a boolean, which takes the value 'true' (if the returned object is a point of interest) or is absent (if it's an address or street).
 
 Oullins-Pierre-Bénite
