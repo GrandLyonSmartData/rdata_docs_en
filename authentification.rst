@@ -5,7 +5,7 @@ Authentication
 
 Principles
 -------------------
-Some of the data published by Data services require authorization to access it via API (to load it into a GIS like QGIS for example).
+Some of the data published by Data services requires authorization to access it via API (to load it into a GIS software like QGIS for example).
 To obtain authorization, you must complete two consecutive steps :
 
 - Create an account on GrandLyon Connect (identity federation service) to log in to the data platform : https://moncompte.grandlyon.com/login
@@ -14,9 +14,9 @@ To obtain authorization, you must complete two consecutive steps :
 
 Once these steps are complete, you will have two separate accounts with the same username:
 
-- The GrandLyon Connect account, which provides access to the various digital services offered by Metropole de Lyon (such as the user support service or Toodego for handling administrative procedures). This account allows you to log in to the platform and navigate to find or view data requiring authentication.
+- The GrandLyon Connect account, which provides access to the various digital services offered by the Métropole de Lyon (such as the user support service or Toodego for handling administrative procedures). This account allows you to log in to the platform and navigate to find or view data requiring authentication.
 
-- The Data Platform account, which is a technical account (with a username and password specific to the Data Platform) that allows you to access the platform’s data via API.
+- The data platform account, which is a technical account (with a username and password specific to the data platform) that allows you to access the platform’s data via API.
 
 Please note that the passwords for your GrandLyon Connect account and the one you define for the platform can and should be different.
 
@@ -25,7 +25,7 @@ These are strictly personal, and they must be used, in the context of applicatio
 How do I reset my password if I forget it?
 --------------------------
 - GrandLyon Connect Account: Mot de passe oublié ? on the GrandLyon Connect page: https://moncompte.grandlyon.com/login/?next=/accounts/profile/
-- Data Platform (API) Account: Password forgotten ? on the Data Platform login page https://data.grandlyon.com/portail/fr/connexion
+- Data Platform (API) Account: Password forgotten ? on the Data Platform login page https://data.grandlyon.com/portail/en/connexion
 
 How to use these authentication elements to reach the restricted datasets.
 --------------------------
