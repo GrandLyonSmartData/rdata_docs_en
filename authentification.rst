@@ -6,15 +6,29 @@ Authentication
 Principles
 -------------------
 Some of the data published by Data services require authorization to access it via API (to load it into a GIS like QGIS for example).
-In order to obtain one, you must open an account on GrandLyon Connect https://moncompte.grandlyon.com/login/ to connect to the data platform and then define your password for the data platform via the following link https://data.grandlyon.com/onegeo-login/fr/profile/ (you will need to log out before accessing this page).
+To obtain authorization, you must complete two consecutive steps:
+
+- Create an account on ProConnect or GrandLyon Connect (identity federation services) to log in to the data platform : https://moncompte.grandlyon.com/login
+
+- Then set your password for the data platform via the page https://data.grandlyon.com/portail/fr/mot-de-passe-oublie (you must be logged out of your account).
+
+Once these steps are complete, you will have two separate accounts with the same username:
+
+- The GrandLyon Connect account, which provides access to the various digital services offered by Metropole de Lyon (such as the user support service or Toodego for handling administrative procedures) or the ProConnect account. This account allows you to log in to the platform and navigate to find or view data requiring authentication.
+
+- The Data Platform account, which is a technical account (with a username and password specific to the Data Platform) that allows you to access the platform’s data via API.
 
 Please note that the passwords for your GrandLyon Connect account and the one you define for the platform can and should be different.
 
+These are strictly personal, and they must be used, in the context of application development for third parties, with some wariness.
 
-Once this stage is completed, you'll get a login (generally the e-mail address used when creating the account) and a password. These are strictly personal, and they must be used, in the context of application development for third parties, with some wariness.
+How do I reset my password if I forget it?
+--------------------------
+- GrandLyon Connect Account: Mot de passe oublié ? on the GrandLyon Connect page: https://moncompte.grandlyon.com/login/?next=/accounts/profile/
+- Data Platform (API) Account: Password forgotten? on the Data Platform login page https://data.grandlyon.com/portail/fr/connexion
 
-But let's first see how to use these authentication elements to reach the restricted datasets.
-
+How to use these authentication elements to reach the restricted datasets.
+--------------------------
 The authentication method is `Basic Auth HTTP <https://en.wikipedia.org/wiki/Basic_access_authentication>`_ At the time of access to each kind of service, it is thus mandatory to use the 'Authorization' HTTP header, in which will be inserted in your login and password, separated by a colon (":") and  `base64 <https://en.wikipedia.org/wiki/Base64>`_ encoded. The header should then look like this :
 
 ::
@@ -24,7 +38,7 @@ The authentication method is `Basic Auth HTTP <https://en.wikipedia.org/wiki/Bas
 But don't be fooled! Base64 encoding is not an encryption! The process is reversible and one can retrieve the encoded values very easily. Coupled with an HTTP stream, which encrypts the information sent by and towards the server, they are not decipherable, but written without any precaution in the code. 
 
 
-cURL and WGET examples
+curl and wget examples
 --------------------------
 
 The usage of an authorization header with cURL is very easy. Let's imagine a user with the following credentials:
@@ -32,15 +46,15 @@ The usage of an authorization header with cURL is very easy. Let's imagine a use
 * login : demo
 * password : demo4dev
 
-The cURL instruction to use in order to access the "demo.demovelov" data on the data service would then be:
+The curl instruction to use in order to access the "demo.demovelov" data on the data service would then be:
 
 ::
 
-    cURL -u demo:demo4dev curl https://download.data.grandlyon.com/ws/rdata/demo.demovelov/all.json?compact=false
+    curl -u demo:demo4dev https://download.data.grandlyon.com/ws/rdata/demo.demovelov/all.json?compact=false
 
 If there is no mistake, you should then get a json stream. 
 
-The WGET instruction is almost the same: 
+The wget instruction is almost the same: 
 
 :: 
 
